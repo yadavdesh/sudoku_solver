@@ -1,0 +1,29 @@
+#!/usr/bin/env ruby
+
+require_relative "lib/sudoku"
+
+unless input = ARGV[0]
+  puts "Usage: solve <sudoku-string>,\n  where <sudoku-string> is expected to be a 81-byte string with 0's for the blank fields"
+  exit 1
+end
+
+begin
+  puzzle = Sudoku::Puzzle.from_s(input)
+rescue => e
+  puts e.message
+  exit 1
+end
+
+puts "Input:"
+puts puzzle.to_chart
+puts
+
+solver = Sudoku::Solver.new
+
+if solved = solver.solve(puzzle)
+  puts "Solution:"
+  puts solved.to_s
+  puts solved.to_chart
+else
+  puts "There is no solution for the input string"
+end
